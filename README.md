@@ -44,12 +44,12 @@ Eway offers a wide range of customization options. Here's a breakdown of the ava
 
 | Feature | Options | Status |
 |---------|---------|--------|
-| Backend | 🔥 Firebase<br>🌐 REST API | 🟢<br>🔴 |
+| Backend | 🔥 Firebase<br>🌐 REST API | 🔴<br>🔴 |
 | State Management | 🔄 Riverpod<br>🧱 BLoC<br>⚡ GetX | 🟢<br>🔴<br>🔴 |
-| Localization | 🌍 Multi-language (l10n)<br>🏠 Single language | 🟢<br>🟢 |
-| Themes | 🌑 Dark Theme<br>🌕 Light Theme<br>💡 Both | 🟢<br>🟢<br>🟢 |
+| Localization | 🌍 Multi-language (l10n)<br>🏠 Single language |🔴 <br>🟢 |
+| Themes | 🌑 Dark Theme<br>🌕 Light Theme<br>💡 Both | 🟢<br>🟢<br>🔴 |
 | Environment | 🏗️ Single Environment<br>🏙️ Multiple Environments | 🟢<br>🔴 |
-| Firebase Notifications | 🔔 Enabled<br>🔕 Disabled | 🟢<br>🟢 |
+| Firebase Notifications | 🔔 Enabled<br>🔕 Disabled | 🔴<br>🟢 |
 | Routing | 📍 App Router<br>📍 Go Router | 🔴<br>🟢 |
 
 🟢 Available   🔴 Coming Soon
