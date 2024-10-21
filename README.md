@@ -42,15 +42,20 @@ Eway is a powerful CLI tool that supercharges your Flutter development process. 
 
 Eway offers a wide range of customization options. Here's a breakdown of the available features:
 
-| Feature | Options | Status |
-|---------|---------|--------|
-| Backend | 🔥 Firebase<br>🌐 REST API | 🔴<br>🔴 |
-| State Management | 🔄 Riverpod<br>🧱 BLoC<br>⚡ GetX | 🟢<br>🔴<br>🔴 |
-| Localization | 🌍 Multi-language (l10n)<br>🏠 Single language |🔴 <br>🟢 |
-| Themes | 🌑 Dark Theme<br>🌕 Light Theme<br>💡 Both | 🟢<br>🟢<br>🔴 |
-| Environment | 🏗️ Single Environment<br>🏙️ Multiple Environments | 🟢<br>🔴 |
-| Firebase Notifications | 🔔 Enabled<br>🔕 Disabled | 🔴<br>🟢 |
-| Routing | 📍 App Router<br>📍 Go Router | 🔴<br>🟢 |
+| State Management | Riverpod | BLoC | GetX |
+|---------|----------|------|------|
+| Backend (Firebase) | 🔴 | 🔴 | 🔴 |
+| Backend (REST API) | 🔴 | 🔴 | 🔴 |
+| Localization (Multi-language) | 🔴 | 🔴 | 🔴 |
+| Localization (Single language) | 🟢 | 🔴 | 🔴 |
+| Dark Theme | 🟢 | 🔴 | 🔴 |
+| Light Theme | 🟢 | 🔴 | 🔴 |
+| Both Themes | 🔴 | 🔴 | 🔴 |
+| Single Environment | 🟢 | 🔴 | 🔴 |
+| Multiple Environments | 🔴 | 🔴 | 🔴 |
+| Firebase Notifications | 🔴 | 🔴 | 🔴 |
+| Go Router | 🟢 | 🔴 | 🔴 |
+
 
 🟢 Available   🔴 Coming Soon
 
