@@ -93,4 +93,4 @@ If you find Eway helpful, please consider giving it a star ⭐ on GitHub and sha
 
 ---
 
-Built with 💙 by [Your Name/Organization] and the Flutter community.
+Built with 💙 by hberkayozdemir/eway and the Flutter community.
