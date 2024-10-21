@@ -1,10 +1,10 @@
 name: eway
-description: Eway is easy way to develop applications with flutter!
+description: Eway is an easy way to develop applications with Flutter!
 version: 0.0.1
-publish_to: none
-
+homepage: https://eway.studio
+# Remove the "publish_to: none" line to allow publishing to pub.dev
 environment:
-  sdk: ^3.5.0
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   args: ^2.5.0
@@ -21,4 +21,4 @@ dev_dependencies:
   very_good_analysis: ^6.0.0
 
 executables:
-  eway:
+  eway: bin/eway.dart

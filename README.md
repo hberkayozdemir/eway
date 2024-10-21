@@ -2,7 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/eway.svg)](https://pub.dev/packages/eway)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![stars](https://img.shields.io/github/stars/yourusername/eway.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/yourusername/eway)
+[![stars](https://img.shields.io/github/stars/hberkayozdemir/eway.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/hberkayozdemir/eway)
 [![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
 
 Eway is a powerful CLI tool that supercharges your Flutter development process. Create fully-configured Flutter apps in seconds, not hours!

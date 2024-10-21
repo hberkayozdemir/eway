@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:path/path.dart' as path;
 
 class CreateCommand extends Command<int> {
   CreateCommand({required Logger logger}) : _logger = logger {
@@ -52,25 +53,45 @@ class CreateCommand extends Command<int> {
     final setFirebaseNotifications =
         _logger.confirm('Do you want to set up Firebase Notifications?');
 
-    // Step 7: State Management
+    // Step 7: State Management (only Riverpod is supported for now)
     final stateManagement = _logger.chooseOne(
       'Which state management are you going to use?',
       choices: ['🔄 Riverpod', '🧱 BLoC', '⚡ Get'],
       defaultValue: '🔄 Riverpod',
     );
 
-    // Step 8: Router
+    if (stateManagement != '🔄 Riverpod') {
+      _logger.err('Currently, only Riverpod is supported.');
+      _logger.info(
+        'If you want to contribute to adding other state management systems, check out:',
+      );
+      _logger.info('https://github.com/hberkayozdemir/eway');
+      return ExitCode.usage.code;
+    }
+
+    // Step 8: Router (this is valid for Riverpod)
     final routerChoice = _logger.chooseOne(
       'What is your router?',
       choices: ['📍 App Router', '📍 Go Router'],
       defaultValue: '📍 Go Router',
     );
 
-    // Copy the template to the new project directory
-    await _copyTemplate(appName, packageName);
+    // Copy the appropriate Riverpod template based on environment choice
+    final templateFolder = useMultipleEnvironments
+        ? '../templates/riverpod/eway_riverpod_multi_base'
+        : '../templates/riverpod/eway_riverpod_base';
 
-    // Post-processing: Update package name and app name using
-    //the respective packages
+    final templatePackageName =
+        templateFolder.replaceAll('../templates/riverpod/', '');
+    await _copyTemplate(
+      appName,
+      packageName,
+      templateFolder,
+      templatePackageName,
+    );
+
+    // Post-processing: Update package name and app name using the respective
+    // packages
     await _updatePackageAndAppName(appName, packageName);
 
     // Show summary of selected options
@@ -91,61 +112,17 @@ class CreateCommand extends Command<int> {
     return ExitCode.success.code;
   }
 
-  Future<void> _copyTemplate(String appName, String packageName) async {
-    final templateDir = Directory(
-      '../templates/riverpod_firebase_single_env_go_router_dark_theme_no_localized',
-    );
-    final appDir = Directory('./$appName');
-
-    if (!templateDir.existsSync()) {
-      _logger.err('Template directory not found!');
-      return;
-    }
-
-    // Create project directory
-    await appDir.create(recursive: true);
-
-    // Copy the template
-    await for (final entity in templateDir.list(recursive: true)) {
-      final relativePath = entity.path.replaceFirst(templateDir.path, '');
-      final targetPath = appDir.path + relativePath;
-
-      if (entity is File) {
-        await File(entity.path).copy(targetPath);
-      } else if (entity is Directory) {
-        await Directory(targetPath).create(recursive: true);
-      }
-    }
-
-    _logger.info('Project "$appName" created successfully from template.');
-
-    // Update import statements in all Dart files
-    await _updateImportStatements(appDir, appName);
-  }
-
-  Future<void> _updateImportStatements(Directory appDir, String appName) async {
-    final dartFiles = appDir
-        .listSync(recursive: true)
-        .whereType<File>()
-        .where((file) => file.path.endsWith('.dart'));
-
-    for (final file in dartFiles) {
-      var content = await file.readAsString();
-      content = content.replaceAll(
-        'package:riverpod_firebase_single_env_go_router_dark_theme_no_localized',
-        'package:${appName.toLowerCase().replaceAll(' ', '_')}',
-      );
-      await file.writeAsString(content);
-    }
-
-    _logger.info('Import statements updated in all Dart files.');
-  }
-
   Future<void> _updatePackageAndAppName(
     String appName,
     String packageName,
   ) async {
     final appDir = Directory('./$appName');
+
+    // Check if the directory exists
+    if (!await appDir.exists()) {
+      _logger.err('Project directory does not exist: $appDir');
+      return;
+    }
 
     // Navigate to the project directory
     Directory.current = appDir.path;
@@ -156,7 +133,7 @@ class CreateCommand extends Command<int> {
     if (await pubspecFile.exists()) {
       var content = await pubspecFile.readAsString();
       content = content.replaceFirst(
-        RegExp(r'name: .*'),
+        RegExp('name: .*'),
         'name: ${appName.toLowerCase().replaceAll(' ', '_')}',
       );
       await pubspecFile.writeAsString(content);
@@ -200,5 +177,83 @@ class CreateCommand extends Command<int> {
       return;
     }
     _logger.info('App name updated successfully.');
+  }
+
+  Future<void> _copyTemplate(
+    String appName,
+    String packageName,
+    String templateFolder,
+    String templatePackageName,
+  ) async {
+    final templateDir = Directory(templateFolder);
+    // Create the app directory in the current working directory
+    final appDir = Directory(path.join(Directory.current.path, appName));
+
+    if (!templateDir.existsSync()) {
+      _logger.err('Template directory not found!');
+      return;
+    }
+
+    // Create project directory
+    try {
+      await appDir.create(recursive: true);
+    } catch (e) {
+      _logger.err('Failed to create project directory: $e');
+      _logger.info(
+        'Please ensure you have write permissions in the current directory.',
+      );
+      return;
+    }
+
+    _logger.info('Creating project directory at: ${appDir.path}');
+
+    // Define directories to be skipped (like /macos, /ios)
+    final directoriesToSkip = ['macos', 'ios', 'windows', 'linux'];
+
+    // Copy the template
+    await for (final entity in templateDir.list(recursive: true)) {
+      final relativePath = entity.path.replaceFirst(templateDir.path, '');
+
+      // Skip directories that are in the skip list
+      if (directoriesToSkip.any((dir) => relativePath.startsWith('/$dir'))) {
+        _logger.detail('Skipping $relativePath');
+        continue;
+      }
+
+      final targetPath = path.join(appDir.path, relativePath.substring(1));
+
+      if (entity is File) {
+        await File(entity.path).copy(targetPath);
+      } else if (entity is Directory) {
+        await Directory(targetPath).create(recursive: true);
+      }
+    }
+
+    _logger.info('Project "$appName" created successfully from template.');
+
+    // Update import statements in all Dart files
+    await _updateImportStatements(appDir, appName, templatePackageName);
+  }
+
+  Future<void> _updateImportStatements(
+    Directory appDir,
+    String appName,
+    String templateDirectoryName,
+  ) async {
+    final dartFiles = appDir
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((file) => file.path.endsWith('.dart'));
+
+    for (final file in dartFiles) {
+      var content = await file.readAsString();
+      content = content.replaceAll(
+        'package:$templateDirectoryName',
+        'package:${appName.toLowerCase().replaceAll(' ', '_')}',
+      );
+      await file.writeAsString(content);
+    }
+
+    _logger.info('Import statements updated in all Dart files.');
   }
 }
