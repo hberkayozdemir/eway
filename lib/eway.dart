@@ -1,4 +1,4 @@
-/// eway, A Very Good Project created by Very Good CLI.
+/// eway, Eway is easy way to develop applications with flutter!
 ///
 /// ```sh
 /// # activate eway

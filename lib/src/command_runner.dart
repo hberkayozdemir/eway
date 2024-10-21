@@ -1,14 +1,28 @@
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:cli_completion/cli_completion.dart';
-import 'package:eway/src/commands/commands.dart';
+import 'package:eway/src/commands/create_command.dart';
+import 'package:eway/src/commands/update_command.dart';
 import 'package:eway/src/version.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:pub_updater/pub_updater.dart';
 
 const executableName = 'eway';
 const packageName = 'eway';
-const description = 'A Very Good Project created by Very Good CLI.';
+const description = """
+
+
+
+
+ .ooooo.  oooo oooo    ooo  .oooo.   oooo    ooo 
+d88' `88b  `88. `88.  .8'  `P  )88b   `88.  .8'  
+888ooo888   `88..]88..8'    .oP"888    `88..8'   
+888    .o    `888'`888'    d8(  888     `888'    
+`Y8bod8P'     `8'  `8'     `Y888""8o     .8'     
+                                     .o..P'      
+                                     `Y8P'       
+                                                                                        
+Eway is easy way to develop applications with flutter!""";
 
 /// {@template eway_command_runner}
 /// A [CommandRunner] for the CLI.
@@ -39,7 +53,7 @@ class EwayCommandRunner extends CompletionCommandRunner<int> {
       );
 
     // Add sub commands
-    addCommand(SampleCommand(logger: _logger));
+    addCommand(CreateCommand(logger: _logger)); // Add CreateCommand here
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 
